@@ -18,19 +18,20 @@ const Reviews = ({ reviewPromise }) => {
           with ease!
         </p>
       </div>
-      <div>
+      <div className="my-20">
         <Swiper
         loop={true}
           effect={"coverflow"}
           grabCursor={true}
           centeredSlides={true}
+          spaceBetween={30}
           slidesPerView={3}
           coverflowEffect={{
             rotate: 30,
-            stretch: '30%',
+            stretch: '50%',
             depth: 200,
             modifier: 1,
-            scale:1,
+            scale:0.80,
             slideShadows: true,
           }}
           autoplay={{

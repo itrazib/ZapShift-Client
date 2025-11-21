@@ -4,7 +4,7 @@ const ReviewCard = ({review}) => {
   const {review:testimonial, userName} = review;
  
   return (
-    <div class="w-full max-w-xs bg-white rounded-2xl p-6 shadow-sm space-y-4">
+    <div class="w-full max-w-3xl bg-white rounded-2xl p-6 shadow-sm space-y-4">
       <div class="text-3xl text-teal-300">❝</div>
 
       <p class="text-gray-600 text-sm leading-relaxed">

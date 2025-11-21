@@ -7,7 +7,7 @@ import { Carousel } from 'react-responsive-carousel';
 
 const Banner = () => {
     return (
-         <Carousel className='my-10' autoPlay={true} stopOnHover={true} showIndicators={true} showStatus={false} showThumbs={false}>
+         <Carousel className='my-10' infiniteLoop={true} autoPlay={true} stopOnHover={true} showIndicators={true} showStatus={false} showThumbs={false}>
                 <div>
                     <img src={bannerimg1} />
                     
