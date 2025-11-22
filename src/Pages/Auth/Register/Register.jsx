@@ -1,7 +1,11 @@
-import React from "react";
 import { useForm } from "react-hook-form";
+import SocialLogin from "../SocialLogin/SocialLogin";
+import { Link } from "react-router";
+import useAuth from "../../../Hooks/useAuth";
 
 const Register = () => {
+    const { registerUser } = useAuth()
+    
   const {
     register,
     handleSubmit,
@@ -10,7 +14,17 @@ const Register = () => {
 
   const handleSubmitRegister = (data) => {
     console.log(data);
+    registerUser(data.email, data.password)
+    .then(result => {
+        console.log(result.user)
+    })
+    .catch(error => {
+        console.log(error.message)
+    })
+
   };
+
+ 
 
   return (
     <div className="min-h-screen flex items-center justify-center  p-4">
@@ -89,20 +103,14 @@ const Register = () => {
 
         <p className="text-center text-gray-600 text-sm mb-4">
           Already have an account?{" "}
-          <a className="text-green-600 font-medium" href="#">
+          <Link to='/login'><a className="text-green-600 font-medium" href="#">
             Login
-          </a>
+          </a></Link>
         </p>
 
         <div className="divider">Or</div>
 
-        <button className="btn btn-outline w-full flex items-center gap-2">
-          <img
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            className="w-5 h-5"
-          />
-          Register with Google
-        </button>
+        <SocialLogin></SocialLogin>
       </div>
     </div>
   );
