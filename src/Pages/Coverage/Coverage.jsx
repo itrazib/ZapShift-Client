@@ -55,7 +55,7 @@ const Coverage = () => {
         <h2 className="text-3xl font-bold">We deliver almost all over Bangladesh</h2>
       </div>
 
-      <div className="border w-full h-[600px]">
+      <div className=" w-full h-[600px]">
         <MapContainer
           center={position}
           zoom={8}
