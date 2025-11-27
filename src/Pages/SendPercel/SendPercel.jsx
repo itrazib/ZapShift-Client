@@ -1,18 +1,29 @@
-
 import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import useAuth from "../../Hooks/useAuth";
 
 const SendPercel = () => {
-  const { register, handleSubmit,setValue, control } = useForm();
+  const { 
+    register, 
+    handleSubmit, 
+    setValue, 
+    control 
+} = useForm();
+
+const axiosSecure = useAxiosSecure();
+const {user} = useAuth()
+
   const serviceCenters = useLoaderData();
   const regionsDuplicate = serviceCenters.map((r) => r.region);
   const regions = [...new Set(regionsDuplicate)];
   console.log(regions);
-  const senderRegion = useWatch({control,name:"senderRegion"}) || "";
-  const receiverRegion = useWatch({control,name:"receiverRegion"}) || "";
-  
-useEffect(() => {
+  const senderRegion = useWatch({ control, name: "senderRegion" }) || "";
+  const receiverRegion = useWatch({ control, name: "receiverRegion" }) || "";
+
+  useEffect(() => {
     setValue("senderDistrict", "");
   }, [senderRegion]);
 
@@ -28,27 +39,49 @@ useEffect(() => {
 
   const handlePercelDetails = (data) => {
     console.log(data);
-    const isDocument = data.percelType === 'document'
-    const isSameDistrict = data.senderDistrict === data.receiverDistrict
-    const percelWeight = parseFloat(data.percelWeight)
+    const isDocument = data.percelType === "document";
+    const isSameDistrict = data.senderDistrict === data.receiverDistrict;
+    const percelWeight = parseFloat(data.percelWeight);
     // console.log(sameDistrict)
     let cost = 0;
-    if(isDocument){
-        cost = isSameDistrict?60:80;
+    if (isDocument) {
+      cost = isSameDistrict ? 60 : 80;
+    } else {
+      if (percelWeight < 3) {
+        cost = isSameDistrict ? 110 : 150;
+      } else {
+        const extraWeight = percelWeight - 3;
+        cost = isSameDistrict
+          ? 110 + extraWeight * 40
+          : 150 + extraWeight * 40 + 40;
+      }
     }
-    else{
-        if(percelWeight<3){
-            cost = isSameDistrict? 110: 150;
-        }
-        else{
-            const extraWeight = percelWeight - 3;
-            cost = isSameDistrict? 110+extraWeight*40 : 150+extraWeight*40 + 40;
-        }
-    }
-  console.log(cost)
+    console.log(cost);
 
+    Swal.fire({
+      title: "Agree With the cost?",
+      text: `You Will be Charged ${cost}!`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, I Agree!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        axiosSecure.post('/percels', data)
+        .then(res => {
+            console.log(res.data)
+        })
+        // Swal.fire({
+        //   title: "Deleted!",
+        //   text: "Your file has been deleted.",
+        //   icon: "success",
+        // });
+      }
+    });
   };
-  
+
   return (
     <div className="bg-white p-15 mt-10 rounded-2xl shadow-2xl mb-5">
       <div className="text-secondary space-y-3">
@@ -109,12 +142,14 @@ useEffect(() => {
                 <input
                   type="text"
                   className="input w-full"
+                  defaultValue={user.displayName}
                   {...register("senderName")}
                   placeholder="Sender Name"
                 />
                 <label className="label">Sender Email</label>
                 <input
                   type="email"
+                  defaultValue={user.email}
                   className="input w-full"
                   {...register("senderEmail")}
                   placeholder="Sender Email"
@@ -123,7 +158,6 @@ useEffect(() => {
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Sender Regions</legend>
                   <select
-                    
                     {...register("senderRegion")}
                     className="select w-full"
                   >
@@ -139,7 +173,6 @@ useEffect(() => {
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Sender District</legend>
                   <select
-                    
                     {...register("senderDistrict")}
                     className="select w-full"
                   >
@@ -170,9 +203,11 @@ useEffect(() => {
                 />
                 {/* Pickup Details */}
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Pickup Instruction</legend>
+                  <legend className="fieldset-legend">
+                    Pickup Instruction
+                  </legend>
                   <textarea
-                  {...register("pickupInstruction")}
+                    {...register("pickupInstruction")}
                     className="textarea h-24 w-full"
                     placeholder="Pickup Instruction"
                   ></textarea>
@@ -202,7 +237,6 @@ useEffect(() => {
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Receiver Regions</legend>
                   <select
-                 
                     {...register("receiverRegion")}
                     className="select w-full"
                   >
@@ -218,7 +252,6 @@ useEffect(() => {
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Receiver District</legend>
                   <select
-                  
                     {...register("receiverDistrict")}
                     className="select w-full"
                   >
@@ -246,12 +279,14 @@ useEffect(() => {
                   {...register("receiverPhoneNo")}
                   placeholder="Receiver Phone No"
                 />
-                
-                 {/* Delivery Details */}
+
+                {/* Delivery Details */}
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Delivery Instruction</legend>
+                  <legend className="fieldset-legend">
+                    Delivery Instruction
+                  </legend>
                   <textarea
-                  {...register("deliveryInstruction")}
+                    {...register("deliveryInstruction")}
                     className="textarea h-24 w-full"
                     placeholder="Delivery Instruction"
                   ></textarea>
