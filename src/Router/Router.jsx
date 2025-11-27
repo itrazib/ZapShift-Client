@@ -5,6 +5,8 @@ import Coverage from "../Pages/Coverage/Coverage";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
+import ForgetPassword from "../Pages/ForgetPassword/ForgetPassword";
+import SendPercel from "../Pages/SendPercel/SendPercel";
 
 export const router = createBrowserRouter([
     {
@@ -18,6 +20,11 @@ export const router = createBrowserRouter([
             {
                 path:'/coverage',
                 element:<Coverage></Coverage>,
+                loader: () => fetch('/public/service-center.json').then(res => res.json())
+            },
+            {
+                path:'/send_Percel',
+                element:<SendPercel></SendPercel>,
                 loader: () => fetch('/public/service-center.json').then(res => res.json())
             }
         ]
@@ -33,6 +40,10 @@ export const router = createBrowserRouter([
             {
                 path:'/register',
                 element:<Register></Register>
+            },
+            {
+                path:'/forgetPassword',
+                element:<ForgetPassword></ForgetPassword>
             }
         ]
     }

@@ -87,8 +87,9 @@ const Login = () => {
               </p>
             )}
           </label>
+        <Link to="/forgetPassword">  <p className='mt-1'>Forget Password?</p></Link>
 
-          <button className="btn bg-lime-300 w-full my-4">Register</button>
+          <button className="btn bg-lime-300 w-full my-4">Login</button>
         </form>
 
         <p className="text-center text-gray-600 text-sm mb-4">

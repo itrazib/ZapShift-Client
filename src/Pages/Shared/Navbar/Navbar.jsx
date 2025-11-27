@@ -12,15 +12,18 @@ const Navbar = () => {
         <NavLink><li><a>Services</a></li></NavLink>
         <NavLink to='/coverage'><li><a>Coverage</a></li></NavLink>
         <NavLink><li><a>About us</a></li></NavLink>
-        <NavLink><li><a>Pricing</a></li></NavLink>
+        <NavLink to="/send_Percel"><li><a>Send Percel</a></li></NavLink>
         <NavLink><li><a>Blog</a></li></NavLink>
         <NavLink><li><a>Contact</a></li></NavLink>   
     </>
 
     const handleLogout = () => {
          logOut()
-         .then(result => {
+         .then(() => {
             Navigate('/')
+         })
+         .catch(err => {
+          console.log(err)
          })
     }
   return (
