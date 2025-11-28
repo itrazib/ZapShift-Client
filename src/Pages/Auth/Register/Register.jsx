@@ -1,10 +1,13 @@
 import { useForm } from "react-hook-form";
 import SocialLogin from "../SocialLogin/SocialLogin";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../Hooks/useAuth";
+import axios from "axios";
 
 const Register = () => {
-    const { registerUser } = useAuth()
+    const { registerUser, updateUserProfile } = useAuth()
+    const location = useLocation()
+    const Navigate = useNavigate()
     
   const {
     register,
@@ -14,9 +17,33 @@ const Register = () => {
 
   const handleSubmitRegister = (data) => {
     console.log(data);
+
+    const photo = data.photo[0]
     registerUser(data.email, data.password)
     .then(result => {
         console.log(result.user)
+          const formData = new FormData()
+          formData.append('image', photo)
+
+    
+          axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`, formData)
+          .then(res => {
+
+            const userProfile = {
+              displayName : data.name,
+              photoURL : res.data.data.url
+            }
+            
+            updateUserProfile(userProfile)
+            .then(() => {
+              console.log('user Profile updated done')
+            })
+            .catch(err => console.log(err))
+
+            console.log(res.data.data.url)
+          })
+
+        Navigate(location.state || "/")
     })
     .catch(error => {
         console.log(error.message)
@@ -59,6 +86,15 @@ const Register = () => {
               {...register("name", { required: true })}
               placeholder="Name"
               className="input input-bordered w-full"
+            />
+          </label>
+          <label className="form-control w-full mb-4">
+            <span className="label-text">Photo</span>
+            <input
+              type="file"
+              {...register("photo", { required: true })}
+              placeholder="Photo"
+              className="file-input w-full"
             />
           </label>
 

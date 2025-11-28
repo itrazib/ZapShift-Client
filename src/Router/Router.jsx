@@ -7,6 +7,7 @@ import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
 import ForgetPassword from "../Pages/ForgetPassword/ForgetPassword";
 import SendPercel from "../Pages/SendPercel/SendPercel";
+import PrivateRoute from "../components/PrivateRoute/PrivateRoute";
 
 export const router = createBrowserRouter([
     {
@@ -24,7 +25,7 @@ export const router = createBrowserRouter([
             },
             {
                 path:'/send_Percel',
-                element:<SendPercel></SendPercel>,
+                element:<PrivateRoute><SendPercel></SendPercel></PrivateRoute>,
                 loader: () => fetch('/public/service-center.json').then(res => res.json())
             }
         ]

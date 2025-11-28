@@ -142,14 +142,14 @@ const {user} = useAuth()
                 <input
                   type="text"
                   className="input w-full"
-                  defaultValue={user.displayName}
+                  defaultValue={user?.displayName}
                   {...register("senderName")}
                   placeholder="Sender Name"
                 />
                 <label className="label">Sender Email</label>
                 <input
                   type="email"
-                  defaultValue={user.email}
+                  defaultValue={user?.email}
                   className="input w-full"
                   {...register("senderEmail")}
                   placeholder="Sender Email"
