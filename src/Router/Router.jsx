@@ -8,6 +8,11 @@ import Register from "../Pages/Auth/Register/Register";
 import ForgetPassword from "../Pages/ForgetPassword/ForgetPassword";
 import SendPercel from "../Pages/SendPercel/SendPercel";
 import PrivateRoute from "../components/PrivateRoute/PrivateRoute";
+import Dashboard from "../Layouts/Dashboard";
+import MyPercels from "../Pages/Dashboard/MyPercels";
+import Payment from "../Pages/Dashboard/Payment/Payment";
+import PaymentSuccess from "../Pages/Dashboard/Payment/PaymentSuccess";
+import PaymentCancelled from "../Pages/Dashboard/Payment/PaymentCancelled";
 
 export const router = createBrowserRouter([
     {
@@ -45,6 +50,28 @@ export const router = createBrowserRouter([
             {
                 path:'/forgetPassword',
                 element:<ForgetPassword></ForgetPassword>
+            }
+        ]
+    },
+    {
+        path:'/dashboard',
+        element:<PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
+        children:[
+            {
+                path:'/dashboard/my-percels',
+                element:<MyPercels></MyPercels>
+            },
+            {
+                path:'/dashboard/payment/:percelId',
+                element:<Payment></Payment>
+            },
+            {
+                path:'/dashboard/payment-success',
+                element:<PaymentSuccess></PaymentSuccess>
+            },
+            {
+                path:'/dashboard/payment-cancelled',
+                element:<PaymentCancelled></PaymentCancelled>
             }
         ]
     }

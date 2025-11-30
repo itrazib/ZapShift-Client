@@ -15,6 +15,10 @@ const Navbar = () => {
         <NavLink to="/send_Percel"><li><a>Send Percel</a></li></NavLink>
         <NavLink><li><a>Blog</a></li></NavLink>
         <NavLink><li><a>Contact</a></li></NavLink>   
+
+        {
+          user && <NavLink to="/dashboard/my-percels"><li><a>My Percel</a></li></NavLink>
+        }
     </>
 
     const handleLogout = () => {

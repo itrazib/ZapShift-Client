@@ -1,20 +1,16 @@
 import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import useAuth from "../../Hooks/useAuth";
 
 const SendPercel = () => {
-  const { 
-    register, 
-    handleSubmit, 
-    setValue, 
-    control 
-} = useForm();
+  const { register, handleSubmit, setValue, control } = useForm();
 
-const axiosSecure = useAxiosSecure();
-const {user} = useAuth()
+  const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate()
+  const { user } = useAuth();
 
   const serviceCenters = useLoaderData();
   const regionsDuplicate = serviceCenters.map((r) => r.region);
@@ -57,6 +53,7 @@ const {user} = useAuth()
       }
     }
     console.log(cost);
+    data.cost = cost;
 
     Swal.fire({
       title: "Agree With the cost?",
@@ -68,16 +65,20 @@ const {user} = useAuth()
       confirmButtonText: "Yes, I Agree!",
     }).then((result) => {
       if (result.isConfirmed) {
+        axiosSecure.post("/percels", data).then((res) => {
+          console.log(res.data);
+          if (res.data.insertedId) {
+            navigate('/dashboard/my-percels')
 
-        axiosSecure.post('/percels', data)
-        .then(res => {
-            console.log(res.data)
-        })
-        // Swal.fire({
-        //   title: "Deleted!",
-        //   text: "Your file has been deleted.",
-        //   icon: "success",
-        // });
+            Swal.fire({
+              position: "top-center",
+              icon: "success",
+              title: "Your work has been saved",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        });
       }
     });
   };
@@ -97,19 +98,25 @@ const {user} = useAuth()
                 type="radio"
                 name="radio-1"
                 className="radio"
+                id="document"
                 value="document"
                 {...register("percelType")}
                 defaultChecked
               />
-              <label className="label">Document</label>
+              <label for="document" className="label">
+                Document
+              </label>
               <input
                 type="radio"
                 name="radio-1"
+                id="non-document"
                 value="non-document"
                 {...register("percelType")}
                 className="radio"
               />
-              <label className="label">Non-Document</label>
+              <label for="non-document" className="label">
+                Non-Document
+              </label>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-15 mt-5">
               <fieldset className="fieldset ">
